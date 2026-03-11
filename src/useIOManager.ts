@@ -87,15 +87,18 @@ export function useIOManager(options: UseIOManagerOptions): UseIOManagerReturn {
 
   const resolveRootNode = useCallback(() => {
     const scroller = scrollerRef.current;
-    const nativeScrollRef = scroller?.getNativeScrollRef?.();
+    const scrollResponder = scroller?.getScrollResponder?.();
+    const nativeScrollRef =
+      scroller?.getNativeScrollRef?.() ||
+      scrollResponder?.getNativeScrollRef?.() ||
+      scroller?.getScrollRef?.();
 
     return (
-      nativeScrollRef?.getInnerViewNode?.() ||
-      scroller?.getInnerViewNode?.() ||
-      nativeScrollRef?.getScrollableNode?.() ||
-      scroller?.getScrollableNode?.() ||
+      nativeScrollRef?.getInnerViewRef?.() ||
+      scroller?.getInnerViewRef?.() ||
+      scrollResponder?.getInnerViewRef?.() ||
       nativeScrollRef ||
-      scroller
+      null
     );
   }, []);
 
