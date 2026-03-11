@@ -1,0 +1,150 @@
+# rn-intersection-observer
+
+React Native implementation of the
+[Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+to tell you when an element enters or leaves the viewport.
+
+## Installation
+
+Install using [Yarn](https://yarnpkg.com):
+
+```sh
+yarn add rn-intersection-observer
+```
+
+or NPM:
+
+```sh
+npm install rn-intersection-observer --save
+```
+
+## Usage
+
+You can pass any component to the `<InView />`, and it will handle creating the
+wrapping View component. Add a handler to the `onChange` method, and control the
+state in your own component. Any extra props you add to `<InView>` will be
+passed to the View component, allowing you to set the `style`, etc.
+
+```tsx
+import React, { useRef } from 'react';
+import { Text } from 'react-native';
+import {
+  IOScrollView,
+  IOScrollViewController,
+  InView,
+} from 'rn-intersection-observer';
+
+function Demo() {
+  const scrollViewRef = useRef<IOScrollViewController>(null);
+  return (
+    <IOScrollView ref={scrollViewRef}>
+      <Text
+        onPress={() => {
+          scrollViewRef.current?.scrollToEnd();
+        }}
+      >
+        Scroll to bottom
+      </Text>
+      <InView onChange={(inView: boolean) => console.log('Inview:', inView)}>
+        <Text>
+          Plain children are always rendered. Use onChange to monitor state.
+        </Text>
+      </InView>
+    </IOScrollView>
+  );
+}
+
+export default Demo;
+```
+
+You can also use the `threshold` prop to control how much of the element must be visible before it is considered in view. A value of `0` (default) triggers as soon as any part of the element is visible, while `1` requires the element to be fully visible within the viewport.
+
+```tsx
+<IOScrollView threshold={0.5}>
+  <InView onChange={(inView: boolean) => console.log('Inview:', inView)}>
+    <Text>This triggers when at least 50% of the element is visible.</Text>
+  </InView>
+</IOScrollView>
+```
+
+Please note that the functionality of the InView component is dependent on the use of the withIO higher-order component to wrap your scrollable component. The rn-intersection-observer library presently offers two frequently used scrollable components: IOScrollView and IOFlatList. It's imperative to utilize the InView component within one of these two components for it to work as intended. If neither IOScrollView nor IOFlatList suits your requirements, you have the flexibility to employ withIO to encapsulate your custom scrollable components.
+
+```tsx
+// IOScrollView definition
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { ScrollView, ScrollViewProps } from 'react-native';
+import { type IOComponentProps, withIO } from 'rn-intersection-observer';
+
+export type IOScrollViewController = ScrollView;
+
+export type IOScrollViewProps = IOComponentProps & ScrollViewProps;
+
+const IOScrollView = withIO(ScrollView, [
+  'scrollTo',
+  'scrollToEnd',
+  'getScrollResponder',
+  'getScrollableNode',
+  'getInnerViewNode',
+]);
+
+export default IOScrollView as unknown as ForwardRefExoticComponent<
+  IOScrollViewProps & RefAttributes<IOScrollViewController>
+>;
+```
+
+Furthermore, InView cannot be used within nested scrollable components. It solely monitors the immediate parent's scroll behavior, and scrolling at higher ancestral levels does not trigger InView's visibility callback.
+
+## API
+
+### IOScrollView
+
+- Props: Inherits [ScrollView Props](https://reactnative.dev/docs/scrollview#props)
+
+  | Name                                                                                           | Type                                                         | Default   | Required | Description                                                                                                      |
+  | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+  | [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) | { top: number; left: number; right: number; bottom: number } | undefined | false    | Expands or shrinks the viewport bounds used for intersection detection.                                          |
+  | [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds)  | number                                                       | 0         | false    | A value between 0 and 1 indicating what fraction of the element must be visible before it is considered in view. |
+
+- Methods: Inherits [ScrollView Methods](https://reactnative.dev/docs/scrollview#methods)
+
+### IOFlatList Props
+
+- Props: Inherits [FlatList Props](https://reactnative.dev/docs/flatlist#props)
+
+  | Name                                                                                           | Type                                                         | Default   | Required | Description                                                                                                      |
+  | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------ | --------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+  | [rootMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin) | { top: number; left: number; right: number; bottom: number } | undefined | false    | Expands or shrinks the viewport bounds used for intersection detection.                                          |
+  | [threshold](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/thresholds)  | number                                                       | 0         | false    | A value between 0 and 1 indicating what fraction of the element must be visible before it is considered in view. |
+
+- Methods: Inherits [FlatList Methods](https://reactnative.dev/docs/flatlist#methods)
+
+### InView Props
+
+The **`<InView />`** component also accepts the following props:
+
+| Name            | Type                        | Default | Required | Description                                                                                                                                     |
+| --------------- | --------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| **as**          | `ComponentType`             | View    | false    | Render the wrapping element as this element. Defaults to `View`.                                                                                |
+| **children**    | `ReactNode`                 |         | true     | Children expects a plain child, to have the `<InView />` deal with the wrapping element.                                                        |
+| **triggerOnce** | boolean                     | false   | false    | Only trigger this method once                                                                                                                   |
+| **onChange**    | `(inView: boolean) => void` |         | false    | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`. |
+
+## License
+
+## Attribution
+
+`rn-intersection-observer` is a separate package based on the original
+[`react-native-intersection-observer`](https://github.com/zhbhun/react-native-intersection-observer)
+project by `zhbhun`.
+
+This package exists to improve behavior around dynamic list updates,
+especially when `InView` items are removed while scrolling. In the original
+package, that edge case can leave visibility state out of sync, causing the
+wrong items to become disabled or marked out of view while they are still
+inside the screen boundaries.
+
+The goal of this fork is to preserve credit to the original package while
+shipping fixes for those dynamic removal and scrolling edge cases under the
+separate `rn-intersection-observer` package name.
+
+`rn-intersection-observer` is [MIT licensed](./LICENSE).
