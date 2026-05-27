@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.0.1v
+## 1.0.0-alpha
 
-- Introduced `rn-intersection-observer` as a separate package based on the
+- Introduced `@imroodydev/rn-intersection-observer` as a separate package based on the
   original
   [`react-native-intersection-observer`](https://github.com/zhbhun/react-native-intersection-observer).
 - Added explicit attribution to the original package and clarified that this

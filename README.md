@@ -1,4 +1,4 @@
-# rn-intersection-observer
+# @imroodydev/rn-intersection-observer
 
 React Native implementation of the
 [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
@@ -9,13 +9,13 @@ to tell you when an element enters or leaves the viewport.
 Install using [Yarn](https://yarnpkg.com):
 
 ```sh
-yarn add rn-intersection-observer
+yarn add @imroodydev/rn-intersection-observer
 ```
 
 or NPM:
 
 ```sh
-npm install rn-intersection-observer --save
+npm install @imroodydev/rn-intersection-observer --save
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ import {
   IOScrollView,
   IOScrollViewController,
   InView,
-} from 'rn-intersection-observer';
+} from '@imroodydev/rn-intersection-observer';
 
 function Demo() {
   const scrollViewRef = useRef<IOScrollViewController>(null);
@@ -67,13 +67,13 @@ You can also use the `threshold` prop to control how much of the element must be
 </IOScrollView>
 ```
 
-Please note that the functionality of the InView component is dependent on the use of the withIO higher-order component to wrap your scrollable component. The rn-intersection-observer library presently offers two frequently used scrollable components: IOScrollView and IOFlatList. It's imperative to utilize the InView component within one of these two components for it to work as intended. If neither IOScrollView nor IOFlatList suits your requirements, you have the flexibility to employ withIO to encapsulate your custom scrollable components.
+Please note that the functionality of the InView component is dependent on the use of the withIO higher-order component to wrap your scrollable component. The @imroodydev/rn-intersection-observer library presently offers two frequently used scrollable components: IOScrollView and IOFlatList. It's imperative to utilize the InView component within one of these two components for it to work as intended. If neither IOScrollView nor IOFlatList suits your requirements, you have the flexibility to employ withIO to encapsulate your custom scrollable components.
 
 ```tsx
 // IOScrollView definition
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { ScrollView, ScrollViewProps } from 'react-native';
-import { type IOComponentProps, withIO } from 'rn-intersection-observer';
+import { type IOComponentProps, withIO } from '@imroodydev/rn-intersection-observer';
 
 export type IOScrollViewController = ScrollView;
 
@@ -133,7 +133,7 @@ The **`<InView />`** component also accepts the following props:
 
 ## Attribution
 
-`rn-intersection-observer` is a separate package based on the original
+`@imroodydev/rn-intersection-observer` is a separate package based on the original
 [`react-native-intersection-observer`](https://github.com/zhbhun/react-native-intersection-observer)
 project by `zhbhun`.
 
@@ -145,6 +145,6 @@ inside the screen boundaries.
 
 The goal of this fork is to preserve credit to the original package while
 shipping fixes for those dynamic removal and scrolling edge cases under the
-separate `rn-intersection-observer` package name.
+separate `@imroodydev/rn-intersection-observer` package name.
 
-`rn-intersection-observer` is [MIT licensed](./LICENSE).
+`@imroodydev/rn-intersection-observer` is [MIT licensed](./LICENSE).

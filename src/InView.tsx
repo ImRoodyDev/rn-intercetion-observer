@@ -9,7 +9,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { LayoutChangeEvent, View, ViewProps } from 'react-native';
+import { LayoutChangeEvent, View } from 'react-native';
 
 import IOContext, { TrackedElement } from './IOContext';
 
@@ -83,7 +83,9 @@ function InViewComponent(props: InViewProps, ref: React.Ref<InViewHandle>) {
         viewRef.current.measureLayout(relativeToNode, onSuccess, onError);
       },
       callback: (inView: boolean) => {
-        if (!mountedRef.current) return;
+        if (!mountedRef.current) {
+          return;
+        }
         const { triggerOnce, onChange } = propsRef.current;
         if (inView && triggerOnce) {
           // onDestroy: unregister triggers recalculation of remaining elements

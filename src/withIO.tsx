@@ -51,7 +51,7 @@ function withIO<CompProps extends WithIOProps>(
           });
           return handle;
         },
-        []
+        [scrollerRef]
       );
 
       return (

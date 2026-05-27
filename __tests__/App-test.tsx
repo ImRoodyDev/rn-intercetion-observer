@@ -1,14 +1,8 @@
-/**
- * @format
- */
+import { InView, IOFlatList, IOScrollView, withIO } from '../src';
 
-import 'react-native';
-import React from 'react';
-import App from '../App';
-
-// Note: test renderer must be required after react-native.
-import renderer from 'react-test-renderer';
-
-it('renders correctly', () => {
-  renderer.create(<App />);
+it('exports the public package API', () => {
+  expect(InView).toBeDefined();
+  expect(IOFlatList).toBeDefined();
+  expect(IOScrollView).toBeDefined();
+  expect(typeof withIO).toBe('function');
 });

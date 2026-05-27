@@ -12,6 +12,6 @@ module.exports = {
   requirePragma: false,
   insertPragma: false,
   proseWrap: 'preserve',
-  endOfLine: 'lf',
+  endOfLine: 'auto',
   embeddedLanguageFormatting: 'auto',
 };
